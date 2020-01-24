@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "838057563030",
+    "firebase_url": "https://dakblog-64240.firebaseio.com",
+    "project_id": "dakblog-64240",
+    "storage_bucket": "dakblog-64240.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838057563030:android:5802b952ea4373f226c3b7",
+        "android_client_info": {
+          "package_name": "com.kwabenaaboagyedougan.dakblog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838057563030-l0l4i2pb0cid5b7ndnqi1imd1m1egc3e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4TAsdCnuZW3smrv33YWiQ2qSYb4TkYrc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838057563030-l0l4i2pb0cid5b7ndnqi1imd1m1egc3e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
