@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dakblog/models/user.dart';
 
@@ -10,12 +9,14 @@ class DatabaseService {
   //collection reference
   final CollectionReference userCollection =
       Firestore.instance.collection('users');
+  final CollectionReference blogCollection =
+      Firestore.instance.collection('blogs');
 
-  Future updateUserData(String fullname, String email, DateTime dateTime) async {
+  Future updateUserData(
+      String fullname, String email, DateTime dateTime) async {
     try {
-      return await userCollection
-          .document(uid)
-          .setData({'fullname': fullname, 'email': email, 'registered_date': dateTime});
+      return await userCollection.document(uid).setData(
+          {'fullname': fullname, 'email': email, 'registered_date': dateTime});
     } catch (e) {
       print(e.toString());
       return null;
@@ -35,7 +36,7 @@ class DatabaseService {
   Stream<UserData> get userData {
     return userCollection.document(uid).snapshots().map(_userDataFromSnapshot);
   }
-  
+
   // update account info
   Future updateAccountInfo(String fullname) async {
     try {
@@ -47,7 +48,6 @@ class DatabaseService {
       return null;
     }
   }
-
 
   // user doc from a snapshot
   // List<UserData> _userDocumentFromSnapshot(QuerySnapshot snapshot) {
@@ -63,5 +63,5 @@ class DatabaseService {
   // Stream<List<UserData>> get user {
   //   return userCollection.snapshots().map(_userDocumentFromSnapshot);
   // }
-  
+
 }

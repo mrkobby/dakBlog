@@ -17,21 +17,6 @@ class _BlogFeedState extends State<BlogFeed> {
   bool _isSaved = false;
 
   @override
-  void initState() {
-    super.initState();
-    //scrollToTop();
-  }
-
-  void scrollToTop() {
-    widget.scrollController.animateTo(
-      0.0,
-      curve: Curves.decelerate,
-      duration: const Duration(milliseconds: 300),
-    );
-  }
-
-
-  @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
 
@@ -52,17 +37,8 @@ class _BlogFeedState extends State<BlogFeed> {
                       BlogPost(userData: userData, isSaved: _isSaved),
                       BlogPost(userData: userData, isSaved: _isSaved),
                       BlogPost(userData: userData, isSaved: _isSaved),
-                      BlogPost(
-                        userData: userData,
-                        isSaved: _isSaved,
-                        onTap: () {
-                          widget.scrollController.animateTo(
-                            0.0,
-                            curve: Curves.decelerate,
-                            duration: const Duration(milliseconds: 300),
-                          );
-                        },
-                      ),
+                      BlogPost(userData: userData, isSaved: _isSaved),
+                      BlogPost(userData: userData, isSaved: _isSaved),
                     ],
                   ),
                 ),
@@ -76,12 +52,11 @@ class _BlogFeedState extends State<BlogFeed> {
 }
 
 class BlogPost extends StatelessWidget {
-  const BlogPost({@required this.userData, @required bool isSaved, this.onTap})
+  const BlogPost({@required this.userData, @required bool isSaved})
       : _isSaved = isSaved;
 
   final UserData userData;
   final bool _isSaved;
-  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -94,12 +69,9 @@ class BlogPost extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              GestureDetector(
-                onTap: onTap,
-                child: CircleAvatar(
-                  backgroundColor: kDefaultThemeColorDark,
-                  radius: 16.0,
-                ),
+              CircleAvatar(
+                backgroundColor: kDefaultThemeColorDark,
+                radius: 16.0,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
