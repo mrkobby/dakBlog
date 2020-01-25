@@ -1,16 +1,35 @@
 import 'package:dakblog/models/user.dart';
 import 'package:dakblog/services/database.dart';
 import 'package:dakblog/shared/constants.dart';
+import 'package:dakblog/shared/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BlogFeed extends StatefulWidget {
+  final ScrollController scrollController;
+  const BlogFeed({@required this.scrollController});
+
   @override
   _BlogFeedState createState() => _BlogFeedState();
 }
 
 class _BlogFeedState extends State<BlogFeed> {
   bool _isSaved = false;
+
+  @override
+  void initState() {
+    super.initState();
+    //scrollToTop();
+  }
+
+  void scrollToTop() {
+    widget.scrollController.animateTo(
+      0.0,
+      curve: Curves.decelerate,
+      duration: const Duration(milliseconds: 300),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +41,31 @@ class _BlogFeedState extends State<BlogFeed> {
           if (snapshot.hasData) {
             UserData userData = snapshot.data;
 
-            return ListView(
+            return Column(
               children: <Widget>[
-                BlogPost(userData: userData, isSaved: _isSaved),
-                BlogPost(userData: userData, isSaved: _isSaved),
-                BlogPost(userData: userData, isSaved: _isSaved),
-                BlogPost(userData: userData, isSaved: _isSaved),
+                Flexible(
+                  child: ListView(
+                    controller: widget.scrollController,
+                    //reverse: true,
+                    shrinkWrap: true,
+                    children: <Widget>[
+                      BlogPost(userData: userData, isSaved: _isSaved),
+                      BlogPost(userData: userData, isSaved: _isSaved),
+                      BlogPost(userData: userData, isSaved: _isSaved),
+                      BlogPost(
+                        userData: userData,
+                        isSaved: _isSaved,
+                        onTap: () {
+                          widget.scrollController.animateTo(
+                            0.0,
+                            curve: Curves.decelerate,
+                            duration: const Duration(milliseconds: 300),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ],
             );
           } else {
@@ -38,13 +76,12 @@ class _BlogFeedState extends State<BlogFeed> {
 }
 
 class BlogPost extends StatelessWidget {
-  const BlogPost({
-    @required this.userData,
-    @required bool isSaved,
-  }) : _isSaved = isSaved;
+  const BlogPost({@required this.userData, @required bool isSaved, this.onTap})
+      : _isSaved = isSaved;
 
   final UserData userData;
   final bool _isSaved;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +94,12 @@ class BlogPost extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              CircleAvatar(
-                backgroundColor: kDefaultThemeColorDark,
-                radius: 16.0,
+              GestureDetector(
+                onTap: onTap,
+                child: CircleAvatar(
+                  backgroundColor: kDefaultThemeColorDark,
+                  radius: 16.0,
+                ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +110,10 @@ class BlogPost extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text('12 01 2020', style: TextStyle(fontSize: 12.0, color: Colors.black54),),
+                    child: Text(
+                      '12 01 2020',
+                      style: TextStyle(fontSize: 12.0, color: Colors.black54),
+                    ),
                   ),
                 ],
               ),
@@ -85,7 +128,8 @@ class BlogPost extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text('Why beans is important Why beans is important',
-                    style: TextStyle(fontSize: 22.0, color: kDefaultThemeColorDark)),
+                    style: TextStyle(
+                        fontSize: 22.0, color: kDefaultThemeColorDark)),
                 Divider(
                   color: Colors.blueGrey,
                 ),

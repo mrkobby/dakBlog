@@ -1,6 +1,8 @@
 import 'package:dakblog/models/user.dart';
+import 'package:dakblog/screens/home/edit_profile_form.dart';
 import 'package:dakblog/services/auth.dart';
 import 'package:dakblog/services/database.dart';
+import 'package:dakblog/shared/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:dakblog/shared/constants.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +19,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    
+
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user.userID).userData,
       builder: (context, snapshot) {
@@ -32,7 +34,7 @@ class _ProfileState extends State<Profile> {
                 kSizedBoxCol20,
                 CircleAvatar(
                   backgroundColor: kDefaultThemeColorDark,
-                  radius: 60.0,
+                  radius: 50.0,
                 ),
                 kSizedBoxCol10,
                 Divider(
@@ -42,7 +44,9 @@ class _ProfileState extends State<Profile> {
                   child: Text(
                     '${userData.fullname}',
                     style: kDefaultTextTitleStyle.copyWith(
-                        color: Colors.black, fontSize: 26.0, fontWeight: FontWeight.w800),
+                        color: kDefaultThemeColorDark,
+                        fontSize: 26.0,
+                        fontWeight: FontWeight.w800),
                   ),
                 ),
                 kSizedBoxCol10,
@@ -61,11 +65,11 @@ class _ProfileState extends State<Profile> {
                 FlatButton(
                   child: ListTile(
                     title: Text("Update account info"),
-                    subtitle: Text('You can change you name and email'),
+                    subtitle: Text('You can change you name and about'),
                     leading: Icon(Icons.security),
                     trailing: Icon(Icons.info),
                   ),
-                  onPressed: () {},
+                  onPressed: () => showBottomPanel(context, EditProfileForm()),
                 ),
                 kSizedBoxCol30,
                 FlatButton(

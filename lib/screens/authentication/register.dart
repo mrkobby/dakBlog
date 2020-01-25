@@ -33,8 +33,8 @@ class _RegisterState extends State<Register> {
       color: kDefaultThemeColorDark,
       opacity: 0.5,
       progressIndicator: CircularProgressIndicator(
-        backgroundColor: kDefaultThemeColorLight,
-        strokeWidth: 2.0,
+        valueColor: AlwaysStoppedAnimation<Color>(kDefaultThemeColorDark),
+        strokeWidth: 3.0,
       ),
       child: Scaffold(
         backgroundColor: kDefaultThemeColorDark,

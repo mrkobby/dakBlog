@@ -1,3 +1,4 @@
+import 'package:dakblog/shared/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:dakblog/shared/constants.dart';
 
@@ -22,22 +23,12 @@ class _SettingsState extends State<Settings> {
           kSizedBoxCol20,
           FlatButton(
             child: ListTile(
-              title: Text("Account Settings"),
-              subtitle: Text('Change account name, bio, etc'),
-              leading: Icon(Icons.person),
-              trailing: Icon(Icons.launch),
-            ),
-            onPressed: () {},
-          ),
-          kSizedBoxCol10,
-          FlatButton(
-            child: ListTile(
               title: Text("Privacy Settings"),
               subtitle: Text('Choose who to view your blog'),
               leading: Icon(Icons.security),
               trailing: Icon(Icons.launch),
             ),
-            onPressed: () {},
+            onPressed: () => showSnackbar(context, 'Privacy Settings in ModalBottomSheet'),
           ),
           kSizedBoxCol10,
           FlatButton(
@@ -47,7 +38,7 @@ class _SettingsState extends State<Settings> {
               leading: Icon(Icons.vpn_key),
               trailing: Icon(Icons.launch),
             ),
-            onPressed: () {},
+            onPressed: () => showSnackbar(context, 'Change Password in ModalBottomSheet'),
           ),
         ],
       ),

@@ -8,7 +8,7 @@ const TextStyle kAuthenticationTextTitleStyle = TextStyle(
 const TextStyle kDefaultTextTitleStyle = TextStyle(
     color: kDefaultThemeColorDark, fontSize: 20.0, fontWeight: FontWeight.w600);
 const TextStyle kAuthErrorTextStyle =
-    TextStyle(color: Colors.red, fontSize: 14.0);
+    TextStyle(color: Colors.red, fontSize: 14.0,);
 
 const SizedBox kSizedBoxCol10 = SizedBox(height: 10.0);
 const SizedBox kSizedBoxCol20 = SizedBox(height: 20.0);
@@ -39,17 +39,6 @@ const InputDecoration kAuthStringTextFieldDecoration = InputDecoration(
     color: kDefaultThemeColorDark,
   ),
 );
-
-// Call SnackBar
-void showSnackbar(BuildContext context, String text) {
-  Scaffold.of(context).showSnackBar(
-    SnackBar(
-      content: Text(text),
-      duration: Duration(seconds: 1),
-    ),
-  );
-}
-
 
 // Blog TextFields
 const InputDecoration kBlogTextFieldDecoration = InputDecoration(

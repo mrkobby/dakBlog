@@ -35,6 +35,19 @@ class DatabaseService {
   Stream<UserData> get userData {
     return userCollection.document(uid).snapshots().map(_userDataFromSnapshot);
   }
+  
+  // update account info
+  Future updateAccountInfo(String fullname) async {
+    try {
+      return await userCollection
+          .document(uid)
+          .updateData({'fullname': fullname});
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
 
   // user doc from a snapshot
   // List<UserData> _userDocumentFromSnapshot(QuerySnapshot snapshot) {

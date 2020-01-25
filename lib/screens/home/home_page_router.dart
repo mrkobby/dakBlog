@@ -12,32 +12,96 @@ class HomePageRouter extends StatefulWidget {
 }
 
 class _HomePageRouterState extends State<HomePageRouter> {
+  @override
+  void dispose() {
+    _disposeScrollController();
+    super.dispose();
+  }
+
   String formattedDate = DateFormat.yMMMMEEEEd().format(DateTime.now());
 
-  int selectedIndex = 0;
-  final widgetOptions = <StatefulWidget>[
-    BlogFeed(),
-    AddEditBlog(),
-    Profile(),
-    Settings(),
-  ];
+  int _selectedIndex = 0;
+  double _lastFeedScrollOffset = 0;
+  ScrollController _scrollController;
 
-  // double _lastFeedScrollOffset = 0;
-  // ScrollController _scrollController;
-  // void _scrollToTop() {
-  //   if (_scrollController == null) {
-  //     return;
-  //   }
-  //   _scrollController.animateTo(
-  //     0.0,
-  //     duration: Duration(milliseconds: 250),
-  //     curve: Curves.decelerate,
-  //   );
-  // }
+  // return page body
+  Widget _buildBody() {
+    switch (_selectedIndex) {
+      case 0:
+        _scrollController =
+            ScrollController(initialScrollOffset: _lastFeedScrollOffset);
+        return BlogFeed(scrollController: _scrollController);
+      case 1:
+        _disposeScrollController();
+        return AddEditBlog();
+      case 2:
+        _disposeScrollController();
+        return Profile();
+      default:
+        _disposeScrollController();
+        return Settings();
+    }
+  }
 
-  void onItemTapped(int index) {
-    setState(() {
-      selectedIndex = index;
+  // onpressed tapButton, update _selectedIndex or go-to blogfeed with scroll
+  void _onTabTapped(BuildContext context, int index) {
+    if (index == _selectedIndex) {
+      _scrollToTop();
+    } else {
+      setState(() => _selectedIndex = index);
+    }
+  }
+
+  // Scroll function for blogfeed
+  void _scrollToTop() {
+    if (_scrollController == null) {
+      return;
+    }
+    _scrollController.animateTo(
+      0.0,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.decelerate,
+    );
+  }
+
+  // Call this when changing the body that doesn't use a ScrollController.
+  void _disposeScrollController() {
+    if (_scrollController != null) {
+      _lastFeedScrollOffset = _scrollController.offset;
+      _scrollController.dispose();
+      _scrollController = null;
+    }
+  }
+
+  // draw bottom navigation bar buttons
+  Widget _buildBottomNavigation() {
+    const List<IconData> unselectedIcons = [
+      Icons.home,
+      Icons.edit,
+      Icons.person,
+      Icons.settings,
+    ];
+    const selecteedIcons = <IconData>[
+      Icons.home,
+      Icons.edit,
+      Icons.person,
+      Icons.settings,
+    ];
+    final bottomNaivgationItems = List.generate(4, (int i) {
+      final iconData =
+          _selectedIndex == i ? selecteedIcons[i] : unselectedIcons[i];
+      return BottomNavigationBarItem(icon: Icon(iconData), title: Container());
+    }).toList();
+
+    return Builder(builder: (BuildContext context) {
+      return BottomNavigationBar(
+        backgroundColor: kDefaultThemeColorLight,
+        iconSize: 32.0,
+        type: BottomNavigationBarType.fixed,
+        items: bottomNaivgationItems,
+        currentIndex: _selectedIndex,
+        onTap: (int i) => _onTabTapped(context, i),
+      );
     });
   }
 
@@ -59,7 +123,7 @@ class _HomePageRouterState extends State<HomePageRouter> {
                   Expanded(
                     flex: 1,
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () => _onTabTapped(context, 0),
                       child: Image(
                         image: AssetImage('assets/logos/dakblog_icon.png'),
                         height: 36.0,
@@ -91,7 +155,7 @@ class _HomePageRouterState extends State<HomePageRouter> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          selectedIndex = 2;
+                          _selectedIndex = 2;
                         });
                       },
                       child: Padding(
@@ -108,42 +172,8 @@ class _HomePageRouterState extends State<HomePageRouter> {
             ),
           ),
         ),
-        body: widgetOptions.elementAt(selectedIndex),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          onTap: onItemTapped,
-          backgroundColor: kDefaultThemeColorLight,
-          elevation: 0.0,
-          currentIndex: selectedIndex,
-          fixedColor: kDefaultThemeColorDark,
-          unselectedItemColor: Colors.blueGrey,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: BottomBarIcon(
-                  icon: Icons.home,
-                ),
-                title: Text('Home'),
-                backgroundColor: kDefaultThemeColorLight),
-            BottomNavigationBarItem(
-                icon: BottomBarIcon(
-                  icon: Icons.edit,
-                ),
-                title: Text('Add/Edit'),
-                backgroundColor: kDefaultThemeColorLight),
-            BottomNavigationBarItem(
-                icon: BottomBarIcon(
-                  icon: Icons.person,
-                ),
-                title: Text('Profile'),
-                backgroundColor: kDefaultThemeColorLight),
-            BottomNavigationBarItem(
-                icon: BottomBarIcon(
-                  icon: Icons.settings,
-                ),
-                title: Text('Settings'),
-                backgroundColor: kDefaultThemeColorLight),
-          ],
-        ),
+        body: _buildBody(),
+        bottomNavigationBar: _buildBottomNavigation(),
       ),
     );
   }
